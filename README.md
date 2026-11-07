@@ -1,6 +1,6 @@
-# Nestor
+# Nestor Asistan
 
-**Emlakçının asistanı.** Emlak ofisleri için telefondan, sahada ve internet olmadan da çalışan portföy, müşteri ve talep yönetimi; talep ile mülkü otomatik eşleştirme; hatırlatmalar; vitrin, QR ve belgeler; yapay zekâ destekli Nestor Asistan.
+**Emlakçının asistanı.** Emlak ofisleri için telefondan, sahada ve internet olmadan da çalışan portföy, müşteri ve talep yönetimi; talep ile mülkü otomatik eşleştirme; hatırlatmalar; vitrin, QR ve belgeler; yapay zekâ destekli öneri, özet ve taslaklar.
 
 > Durum: geliştirme başlangıcı (M0). Pilot hedefi: 22 Şubat 2027.
 
