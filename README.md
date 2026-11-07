@@ -15,7 +15,7 @@ Vite + React 19 + TypeScript + Tailwind (PWA) · Supabase (Postgres, Auth, Stora
 ## Depo yapısı (hedef)
 
 ```
-nestor/
+nestor-asistan/
   apps/web/          # PWA
   apps/public/       # herkese açık sayfalar (/p, /q)
   packages/shared/   # tipler, zod şemaları, eşleştirme, brand.ts
