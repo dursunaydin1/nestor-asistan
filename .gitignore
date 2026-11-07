@@ -1,0 +1,51 @@
+# Product and planning documents are kept local only (repo is public during development)
+docs/
+CLAUDE.md
+.claude/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Real data never goes into the repo; seeds are synthetic only
+data/
+*.xlsx
+*.xls
+*.csv
+!supabase/seed/**/*.csv
+!scripts/**/fixtures/*.csv
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# Supabase local state
+supabase/.temp/
+supabase/.branches/
+
+# Cloudflare
+.wrangler/
+.dev.vars
+
+# Test artifacts
+playwright-report/
+test-results/
+blob-report/
+
+# Logs and OS/editor files
+*.log
+npm-debug.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

@@ -1,0 +1,12 @@
+# Normalize line endings to LF in the repo and working tree, regardless of core.autocrlf
+* text=auto eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff2 binary
+*.ttf binary
+*.pdf binary
