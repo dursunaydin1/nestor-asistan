@@ -1,0 +1,56 @@
+@import '@fontsource-variable/plus-jakarta-sans/wght.css';
+@import 'tailwindcss';
+
+/*
+ * Brand tokens. Navy = trust and steadiness, amber = home, keys and warmth.
+ * brand-800 and accent-400 are the logo colors (src/brand/logo.ts).
+ * Contrast (WCAG 2.1 AA): white on brand-800 14.6:1, brand-900 on accent-400 8.2:1,
+ * slate-600 on white 7.6:1. Body text never goes lighter than slate-600.
+ */
+@theme {
+  --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #eef3f8;
+  --color-brand-100: #d6e2ee;
+  --color-brand-200: #adc4dc;
+  --color-brand-300: #7fa2c5;
+  --color-brand-400: #4f7daa;
+  --color-brand-500: #2f5f8f;
+  --color-brand-600: #1f4a75;
+  --color-brand-700: #16395d;
+  --color-brand-800: #0e2a47;
+  --color-brand-900: #091d33;
+  --color-brand-950: #05111f;
+
+  --color-accent-50: #fef7ec;
+  --color-accent-100: #fceacb;
+  --color-accent-200: #f9d493;
+  --color-accent-300: #f6bc5b;
+  --color-accent-400: #f2a33a;
+  --color-accent-500: #e08a1e;
+  --color-accent-600: #c26d14;
+  --color-accent-700: #9c5214;
+  --color-accent-800: #7e4217;
+  --color-accent-900: #683716;
+
+  --color-canvas: #f5f7fa;
+
+  /* Bottom navigation height, excluding the iOS home indicator inset */
+  --spacing-nav: 4rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-slate-900 antialiased;
+    overscroll-behavior-y: none;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent-500;
+  }
+}

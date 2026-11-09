@@ -7,6 +7,8 @@
     "node": ">=24"
   },
   "scripts": {
+    "dev": "pnpm --filter @app/web dev",
+    "build": "pnpm --filter @app/web build",
     "lint": "eslint .",
     "typecheck": "pnpm -r --if-present typecheck",
     "format": "prettier --write .",

@@ -1,0 +1,58 @@
+{
+  "app": {
+    "name": "Nestor Asistan",
+    "description": "Emlakçının asistanı: portföy, müşteri, talep ve eşleştirme tek yerde."
+  },
+  "nav": {
+    "label": "Ana menü",
+    "today": "Bugün",
+    "query": "Sorgula",
+    "portfolio": "Portföy",
+    "customers": "Müşteriler",
+    "more": "Daha fazla"
+  },
+  "create": {
+    "open": "Yeni kayıt ekle",
+    "title": "Ne eklemek istersiniz?",
+    "close": "Kapat",
+    "property": "Mülk",
+    "person": "Kişi",
+    "request": "Talep",
+    "note": "Görüşme notu"
+  },
+  "pages": {
+    "today": {
+      "title": "Bugün",
+      "emptyTitle": "Bugün için her şey yolunda",
+      "emptyText": "Hatırlatmalar, yeni eşleşmeler ve geciken işler burada görünecek."
+    },
+    "query": {
+      "title": "Sorgula",
+      "emptyTitle": "Müşterinin aradığını hızla bulun",
+      "emptyText": "Bölge, fiyat ve oda sayısına göre portföyünüzde anında arama yapabileceksiniz."
+    },
+    "portfolio": {
+      "title": "Portföy",
+      "emptyTitle": "Portföyünüz henüz boş",
+      "emptyText": "Eklediğiniz mülkler burada listelenecek."
+    },
+    "customers": {
+      "title": "Müşteriler",
+      "emptyTitle": "Henüz müşteri yok",
+      "emptyText": "Alıcı, kiracı ve mal sahipleri burada listelenecek."
+    },
+    "more": {
+      "title": "Daha fazla",
+      "emptyTitle": "Ayarlar ve ofis yönetimi",
+      "emptyText": "Ofis bilgileri, çalışanlar ve içe/dışa aktarma burada yer alacak."
+    }
+  },
+  "errors": {
+    "generic": "Bir şeyler ters gitti",
+    "genericText": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
+    "retry": "Tekrar dene",
+    "notFound": "Sayfa bulunamadı",
+    "notFoundText": "Aradığınız sayfa taşınmış ya da hiç var olmamış olabilir.",
+    "goHome": "Bugün'e dön"
+  }
+}
