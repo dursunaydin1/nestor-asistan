@@ -10,14 +10,11 @@ type Leaves<T, Prefix extends string = ''> = {
 
 export type MessageKey = Leaves<Messages>;
 
-export function t(key: MessageKey, params?: Record<string, string | number>): string {
+// Falls back to the key itself so a missing message is visible rather than blank
+export function t(key: MessageKey): string {
   let node: unknown = tr;
   for (const part of key.split('.')) {
-    node = (node as Record<string, unknown>)[part];
+    node = (node as Record<string, unknown> | undefined)?.[part];
   }
-  if (typeof node !== 'string') return key;
-  if (!params) return node;
-  return node.replace(/\{(\w+)\}/g, (match, name: string) =>
-    name in params ? String(params[name]) : match,
-  );
+  return typeof node === 'string' ? node : key;
 }
