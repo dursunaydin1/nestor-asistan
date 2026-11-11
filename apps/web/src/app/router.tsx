@@ -45,6 +45,13 @@ export const router = createBrowserRouter([
             }),
           },
           {
+            path: paths.diagnostics,
+            lazy: async () => ({
+              Component: (await import('../features/diagnostics/DiagnosticsPage.tsx'))
+                .DiagnosticsPage,
+            }),
+          },
+          {
             path: '*',
             element: <RouteError />,
             loader: () => {

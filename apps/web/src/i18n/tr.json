@@ -54,5 +54,44 @@
     "notFound": "Sayfa bulunamadı",
     "notFoundText": "Aradığınız sayfa taşınmış ya da hiç var olmamış olabilir.",
     "goHome": "Bugün'e dön"
+  },
+  "diagnostics": {
+    "title": "Cihaz testi",
+    "intro": "Bu sayfa telefonun uygulama yeteneklerini dener. Bitince sonuçları kopyalayıp geliştiriciye gönderin.",
+    "rerun": "Testleri yeniden çalıştır",
+    "copy": "Sonuçları kopyala",
+    "copied": "Kopyalandı",
+    "notifyButton": "Bildirim iznini iste ve dene",
+    "testNotificationTitle": "Test bildirimi",
+    "testNotificationBody": "Bildirimler bu cihazda çalışıyor.",
+    "status": {
+      "ok": "Çalışıyor",
+      "fail": "Çalışmıyor",
+      "info": "Bilgi",
+      "pending": "Deneniyor…"
+    },
+    "checks": {
+      "standalone": "Ana ekrandan açılma",
+      "serviceWorker": "Çevrimdışı önbellek",
+      "persist": "Kalıcı depolama izni",
+      "quota": "Ayrılan depolama alanı",
+      "indexedDb": "Yerel veritabanı",
+      "notification": "Bildirim izni",
+      "push": "Bildirim aboneliği",
+      "device": "Cihaz"
+    },
+    "detail": {
+      "yes": "Evet",
+      "no": "Hayır, tarayıcıda açık",
+      "unsupported": "Bu tarayıcı desteklemiyor",
+      "notRegistered": "Kayıtlı değil",
+      "active": "Etkin",
+      "granted": "İzin verildi",
+      "denied": "Reddedildi",
+      "default": "Henüz sorulmadı",
+      "afterPermission": "Bildirim izni verildikten sonra denenir",
+      "readWriteOk": "Yazma ve okuma başarılı",
+      "error": "Hata"
+    }
   }
 }
