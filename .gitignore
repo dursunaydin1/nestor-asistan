@@ -12,6 +12,8 @@ CLAUDE.md
 
 # Real data never goes into the repo; seeds are synthetic only
 data/
+# Source code, not data: the client data layer (Dexie, sync, repositories)
+!apps/web/src/data/
 *.xlsx
 *.xls
 *.csv
