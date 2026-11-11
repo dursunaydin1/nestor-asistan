@@ -10,7 +10,8 @@
     "dev": "pnpm --filter @app/web dev",
     "build": "pnpm --filter @app/web build",
     "lint": "eslint .",
-    "typecheck": "pnpm -r --if-present typecheck && tsc --noEmit -p e2e",
+    "typecheck": "pnpm -r --if-present typecheck && tsc --noEmit -p e2e && tsc --noEmit -p scripts",
+    "regions:import": "node scripts/import-regions/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
@@ -18,6 +19,7 @@
     "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "@app/shared": "workspace:*",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.65.0",
     "@types/node": "^26.6.6",
