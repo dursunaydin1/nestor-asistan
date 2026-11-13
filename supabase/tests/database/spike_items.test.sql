@@ -39,9 +39,10 @@ select is(
   'A stale',
   'last write wins'
 );
+-- Separate statement: a query cannot see rows changed by a function it calls (same snapshot)
+select public.spike_upsert('aaaaaaaa-0000-0000-0000-000000000001', 'A stale', true, 3);
 select isnt(
-  (select deleted_at from public.spike_items
-   where id = (select (public.spike_upsert('aaaaaaaa-0000-0000-0000-000000000001', 'A stale', true, 3) -> 'item' ->> 'id')::uuid)),
+  (select deleted_at from public.spike_items where id = 'aaaaaaaa-0000-0000-0000-000000000001'),
   null,
   'soft delete sets deleted_at'
 );

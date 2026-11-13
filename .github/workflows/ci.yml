@@ -68,4 +68,16 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec supabase db start
       - run: pnpm exec supabase db reset
-      - run: pnpm run --if-present test:rls
+      # Failing assertions are also emitted as annotations, which are readable without sign-in
+      - name: RLS tests
+        shell: bash
+        run: |
+          set +e
+          pnpm run --if-present test:rls 2>&1 | tee rls.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            grep -E 'not ok|# |ERROR|error' rls.log | head -40 | while IFS= read -r line; do
+              echo "::error title=RLS test::${line}"
+            done
+          fi
+          exit "$status"
