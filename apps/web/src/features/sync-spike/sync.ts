@@ -2,21 +2,29 @@
 import type { PostgrestError } from '@supabase/supabase-js';
 import { supabase } from '../../data/supabase.ts';
 import { db } from './db.ts';
-import { nextCursor, pullSince, shouldApplyRemote, toLocal, type RemoteItem } from './merge.ts';
+import {
+  isRetryable,
+  nextCursor,
+  pullSince,
+  requestTimeoutMs,
+  shouldApplyRemote,
+  toLocal,
+  type RemoteItem,
+} from './merge.ts';
 
 export type SyncReport = {
   at: string;
   pushed: number;
   pulled: number;
+  // The server could not be reached; everything stays queued for the next run
   offline: boolean;
+  error?: string;
 };
 
 class RetryLater extends Error {}
 
-// No HTTP status means the request never reached the server; PGRST3xx are auth/JWT errors
-// that a token refresh fixes. Both are retried later instead of marking the write as rejected.
-function isRetryable(error: PostgrestError): boolean {
-  return !navigator.onLine || !error.code || error.code.startsWith('PGRST3');
+function retryLater(error: PostgrestError): boolean {
+  return isRetryable(error.code, navigator.onLine);
 }
 
 async function push(): Promise<number> {
@@ -30,15 +38,17 @@ async function push(): Promise<number> {
     const seq = entry.seq;
     await db.outbox.update(seq, { status: 'sending' });
 
-    const { data, error } = await supabase.rpc('spike_upsert', {
-      p_id: entry.itemId,
-      p_title: entry.title,
-      p_deleted: entry.deleted,
-      p_base_version: entry.baseVersion,
-    });
+    const { data, error } = await supabase
+      .rpc('spike_upsert', {
+        p_id: entry.itemId,
+        p_title: entry.title,
+        p_deleted: entry.deleted,
+        p_base_version: entry.baseVersion,
+      })
+      .abortSignal(AbortSignal.timeout(requestTimeoutMs));
 
     if (error) {
-      if (isRetryable(error)) {
+      if (retryLater(error)) {
         await db.outbox.update(seq, { status: 'pending' });
         throw new RetryLater(error.message);
       }
@@ -70,7 +80,6 @@ async function push(): Promise<number> {
 async function pull(): Promise<number> {
   const cursor = (await db.meta.get('cursor'))?.value;
   const since = pullSince(cursor, Date.now());
-  const pendingIds = new Set((await db.outbox.toArray()).map((entry) => entry.itemId));
 
   let query = supabase
     .from('spike_items')
@@ -80,14 +89,16 @@ async function pull(): Promise<number> {
     .limit(1000);
   if (since) query = query.gt('updated_at', since);
 
-  const { data, error } = await query;
+  const { data, error } = await query.abortSignal(AbortSignal.timeout(requestTimeoutMs));
   if (error) {
-    if (isRetryable(error)) throw new RetryLater(error.message);
+    if (retryLater(error)) throw new RetryLater(error.message);
     throw new Error(error.message);
   }
   const rows = data as RemoteItem[];
 
-  await db.transaction('rw', db.items, db.meta, async () => {
+  await db.transaction('rw', db.items, db.outbox, db.meta, async () => {
+    // Read after the response: edits made while the request was in flight must not be overwritten
+    const pendingIds = new Set((await db.outbox.toArray()).map((entry) => entry.itemId));
     // A cursor too old to trust: drop everything the server can resend, keep unsent edits
     if (cursor && since === null) {
       await db.items.filter((item) => !pendingIds.has(item.id)).delete();
@@ -115,7 +126,9 @@ export function syncNow(): Promise<SyncReport> {
       return { at, pushed, pulled, offline: false };
     } catch (error) {
       if (error instanceof RetryLater) return { at, pushed: 0, pulled: 0, offline: true };
-      throw error;
+      // Surface unexpected failures instead of leaving the page silently stale
+      const message = error instanceof Error ? error.message : String(error);
+      return { at, pushed: 0, pulled: 0, offline: false, error: message };
     }
   })().finally(() => {
     running = null;

@@ -5,7 +5,7 @@ import { PageHeader } from '../../components/PageHeader.tsx';
 import { supabase, supabaseConfigured } from '../../data/supabase.ts';
 import { t } from '../../i18n/index.ts';
 import { clearLocal, db, saveLocal } from './db.ts';
-import type { LocalItem } from './merge.ts';
+import { isReachable, type LocalItem } from './merge.ts';
 import { syncNow, type SyncReport } from './sync.ts';
 
 const inputClass =
@@ -134,14 +134,15 @@ function SyncPanel({ email }: { email: string }) {
 
   const visible = (items ?? []).filter((item) => !item.deletedAt);
   const waiting = (outbox ?? []).filter((entry) => entry.status !== 'attention').length;
+  const reachable = isReachable(online, report?.offline);
 
   return (
     <div className="mt-4 space-y-4 px-4">
       <div className="flex flex-wrap items-center gap-2 text-sm">
         <span
-          className={`rounded-full px-2.5 py-0.5 font-semibold ${online ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'}`}
+          className={`rounded-full px-2.5 py-0.5 font-semibold ${reachable ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'}`}
         >
-          {online ? t('syncSpike.online') : t('syncSpike.offline')}
+          {reachable ? t('syncSpike.online') : t('syncSpike.offline')}
         </span>
         <span className="text-slate-600">
           {t('syncSpike.outbox')}: {waiting}
@@ -151,6 +152,12 @@ function SyncPanel({ email }: { email: string }) {
           {report ? new Date(report.at).toLocaleTimeString('tr-TR') : t('syncSpike.never')}
         </span>
       </div>
+
+      {report?.error && (
+        <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-800">
+          {t('syncSpike.syncError')}
+        </p>
+      )}
 
       <form onSubmit={(event) => void add(event)} className="flex gap-2">
         <input

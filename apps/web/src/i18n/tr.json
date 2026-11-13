@@ -115,6 +115,7 @@
     "lastSync": "Son eşitleme",
     "never": "Henüz yok",
     "outbox": "Gönderilmeyi bekleyen",
+    "syncError": "Eşitleme başarısız oldu; kayıtlarınız bu cihazda güvende ve biraz sonra yeniden denenecek.",
     "version": "Sürüm",
     "empty": "Henüz kayıt yok.",
     "state": {

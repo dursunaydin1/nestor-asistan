@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  isReachable,
+  isRetryable,
   nextCursor,
   pullOverlapMs,
   pullSince,
@@ -48,6 +50,32 @@ describe('pullSince', () => {
   it('pulls everything again when the cursor is too old to trust', () => {
     const old = new Date(now - staleCursorMs - 1).toISOString();
     expect(pullSince(old, now)).toBeNull();
+  });
+});
+
+describe('isRetryable', () => {
+  it('retries requests that got no response, including timeouts', () => {
+    expect(isRetryable('', true)).toBe(true);
+    expect(isRetryable(undefined, true)).toBe(true);
+    expect(isRetryable('23514', false)).toBe(true);
+  });
+
+  it('retries auth errors that a token refresh fixes', () => {
+    expect(isRetryable('PGRST301', true)).toBe(true);
+  });
+
+  it('marks real server rejections for attention', () => {
+    expect(isRetryable('23514', true)).toBe(false);
+    expect(isRetryable('42501', true)).toBe(false);
+  });
+});
+
+describe('isReachable', () => {
+  it('trusts the last sync over navigator.onLine, which stays true behind a VPN', () => {
+    expect(isReachable(true, undefined)).toBe(true);
+    expect(isReachable(true, false)).toBe(true);
+    expect(isReachable(true, true)).toBe(false);
+    expect(isReachable(false, false)).toBe(false);
   });
 });
 

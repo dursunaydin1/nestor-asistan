@@ -34,6 +34,22 @@ export function toLocal(remote: RemoteItem, overwritten = false): LocalItem {
   };
 }
 
+// A request that hangs (e.g. sent just before the network dropped behind a VPN) would block the
+// single-flight sync forever, so every request is aborted after this long and retried later.
+export const requestTimeoutMs = 15_000;
+
+// An empty error code means the request never got a response (offline, aborted, timed out);
+// PGRST3xx are auth/JWT errors that a token refresh fixes. Both are retried later instead of
+// marking the write as rejected.
+export function isRetryable(code: string | undefined, online: boolean): boolean {
+  return !online || !code || code.startsWith('PGRST3');
+}
+
+// navigator.onLine stays true behind a VPN with no network, so the last sync attempt decides
+export function isReachable(online: boolean, lastSyncOffline: boolean | undefined): boolean {
+  return online && !lastSyncOffline;
+}
+
 // Rows may arrive twice because of the overlap window. Keep the newer version, and never
 // replace a local edit that is still waiting in the outbox.
 export function shouldApplyRemote(
