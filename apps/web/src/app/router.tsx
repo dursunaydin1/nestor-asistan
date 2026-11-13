@@ -52,12 +52,6 @@ export const router = createBrowserRouter([
             }),
           },
           {
-            path: paths.syncSpike,
-            lazy: async () => ({
-              Component: (await import('../features/sync-spike/SyncSpikePage.tsx')).SyncSpikePage,
-            }),
-          },
-          {
             path: '*',
             element: <RouteError />,
             loader: () => {

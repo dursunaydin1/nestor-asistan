@@ -93,36 +93,5 @@
       "readWriteOk": "Yazma ve okuma başarılı",
       "error": "Hata"
     }
-  },
-  "syncSpike": {
-    "title": "Senkron denemesi",
-    "intro": "İnternet yokken kayıt ekleyin; bağlantı gelince kayıtlar sunucuyla kendiliğinden eşitlenir.",
-    "notConfigured": "Sunucu bağlantı ayarları eksik. Geliştiriciye haber verin.",
-    "email": "E-posta",
-    "password": "Şifre",
-    "signIn": "Giriş yap",
-    "signOut": "Çıkış yap",
-    "signInError": "Giriş yapılamadı. E-posta ve şifreyi kontrol edin.",
-    "online": "Çevrimiçi",
-    "offline": "Çevrimdışı",
-    "newItem": "Yeni kayıt",
-    "add": "Ekle",
-    "save": "Kaydet",
-    "cancel": "Vazgeç",
-    "edit": "Düzenle",
-    "delete": "Sil",
-    "syncNow": "Şimdi eşitle",
-    "lastSync": "Son eşitleme",
-    "never": "Henüz yok",
-    "outbox": "Gönderilmeyi bekleyen",
-    "syncError": "Eşitleme başarısız oldu; kayıtlarınız bu cihazda güvende ve biraz sonra yeniden denenecek.",
-    "version": "Sürüm",
-    "empty": "Henüz kayıt yok.",
-    "state": {
-      "pending": "Gönderilmeyi bekliyor",
-      "synced": "Eşitlendi",
-      "attention": "Sunucu reddetti",
-      "overwritten": "Başka bir cihazdaki değişikliğin üzerine yazıldı"
-    }
   }
 }
