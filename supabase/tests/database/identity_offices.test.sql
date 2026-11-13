@@ -3,7 +3,7 @@
 -- f1 is a platform admin with no office. All data is synthetic and rolled back.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(48);
+select plan(49);
 
 insert into auth.users (id, email) values
   ('a1000000-0000-0000-0000-000000000000', 'a1@example.test'),
@@ -57,6 +57,15 @@ select is(
   (select count(*) from public.org_usage)::int,
   2,
   'every office gets a usage row'
+);
+-- Rule 15: anon may execute only the public functions allowed here (none yet;
+-- get_public_property and record_public_event join this list in M10)
+select is_empty(
+  $$ select n.nspname || '.' || p.proname
+     from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+     where n.nspname in ('public', 'app')
+       and has_function_privilege('anon', p.oid, 'execute') $$,
+  'anon can execute no function in public or app'
 );
 
 -- ---------------------------------------------------------------- staff a2
