@@ -93,5 +93,10 @@
       "readWriteOk": "Yazma ve okuma başarılı",
       "error": "Hata"
     }
+  },
+  "plans": {
+    "free": "Ücretsiz",
+    "standard": "Standart",
+    "pro": "Pro"
   }
 }

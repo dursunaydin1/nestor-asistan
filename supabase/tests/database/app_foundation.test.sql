@@ -2,7 +2,7 @@
 -- Text cases mirror packages/shared/src/text.test.ts so client and server agree.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(18);
+select plan(20);
 
 select has_extension('pgcrypto', 'pgcrypto is installed');
 select has_extension('pg_net', 'pg_net is installed');
@@ -44,11 +44,11 @@ create table app_test.rows (
 create trigger touch before insert or update on app_test.rows
   for each row execute function app.touch_row();
 
-create table app_test.parents (id uuid primary key, kaydeden_user_id uuid not null);
+create table app_test.parents (id uuid primary key, owner_id uuid not null);
 create table app_test.children (
   id uuid primary key,
   parent_id uuid not null,
-  kaydeden_user_id uuid not null
+  owner_id uuid not null
 );
 create trigger copy_owner before insert or update on app_test.children
   for each row execute function app.copy_parent_owner('app_test.parents', 'parent_id');
@@ -93,7 +93,7 @@ insert into app_test.children values (
   '22222222-2222-2222-2222-222222222222'
 );
 select is(
-  (select kaydeden_user_id from app_test.children),
+  (select owner_id from app_test.children),
   '11111111-1111-1111-1111-111111111111'::uuid,
   'child owner is copied from the parent, not taken from the client'
 );
@@ -106,6 +106,20 @@ select throws_ok(
   null,
   'a child of an unknown or hidden parent is rejected'
 );
+
+-- A retried insert (same x-op-id, same row) is skipped instead of failing or duplicating
+select set_config('request.headers', '{"x-op-id":"dddddddd-0000-0000-0000-000000000001"}', true);
+insert into app_test.rows (id, title) values ('bbbbbbbb-0000-0000-0000-000000000002', 'op insert');
+select lives_ok(
+  $$ insert into app_test.rows (id, title) values ('bbbbbbbb-0000-0000-0000-000000000002', 'retry') $$,
+  'a retried insert with the same op id is skipped without error'
+);
+select is(
+  (select title from app_test.rows where id = 'bbbbbbbb-0000-0000-0000-000000000002'),
+  'op insert',
+  'the retry does not change the row'
+);
+select set_config('request.headers', '', true);
 
 select lives_ok($$ select app.tr_lower('x') $$, 'authenticated can call text helpers');
 
