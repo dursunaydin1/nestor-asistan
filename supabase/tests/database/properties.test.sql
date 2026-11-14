@@ -3,7 +3,7 @@
 -- f1 is a platform admin. All data is synthetic and rolled back. CI only (ADR-0003).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(44);
+select plan(45);
 
 insert into auth.users (id, email) values
   ('a1000000-0000-0000-0000-000000000000', 'a1@example.test'),
@@ -104,8 +104,8 @@ select results_eq(
   'a status change is recorded'
 );
 
-insert into public.properties (id, kind, transactions, price_sale)
-values ('7a210000-0000-0000-0000-000000000000', 'commercial', '{sale,rent}', 3000000);
+insert into public.properties (id, kind, transactions, price_sale, price_rent)
+values ('7a210000-0000-0000-0000-000000000000', 'commercial', '{sale,rent}', 3000000, 15000);
 select is(
   (select code from public.properties where id = '7a210000-0000-0000-0000-000000000000'),
   3,
@@ -128,6 +128,10 @@ select throws_ok(
 select throws_ok(
   $$ insert into public.properties (kind, transactions) values ('residential', '{sale}') $$,
   '23514', null, 'a sale needs a sale price'
+);
+select throws_ok(
+  $$ insert into public.properties (kind, transactions, price_sale) values ('commercial', '{sale,rent}', 1) $$,
+  '23514', null, 'each transaction needs its own price (D-04)'
 );
 select throws_ok(
   $$ insert into public.properties (kind, transactions, price_sale) values ('residential', '{auction}', 1) $$,
